@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,
+	initial-scale=1.0,user-scalable=0">
+	<title>Neighborhood Map</title>
+	<link rel="stylesheet" href="css/style.css">
+	<script>
+	  WebFontConfig = {
+	    google: { families: [ 'Roboto::latin' ] }
+	  };
+	  (function() {
+	    var wf = document.createElement('script');
+	    wf.src = 'https://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+	    wf.type = 'text/javascript';
+	    wf.async = 'true';
+	    var s = document.getElementsByTagName('script')[0];
+	    s.parentNode.insertBefore(wf, s);
+	  })(); 	  
+	</script>
+	<script src="https://use.fontawesome.com/c110a80857.js"></script>
+</head>
+<body>
+	<div class="container">
+		<aside id="drawer">
+			<h2 class="drawer-name">Bart Locations</h2>
+			<div class="search">
+				<input type="text" placeholder="station location" 
+				id="search-val" class="search-val"></input>
+				<button id="search-btn" class="search-btn">
+					<i class="fa fa-filter" aria-hidden="true"></i> filter
+				</button>
+			</div>
+			<ul class="location-list">
+				<li class="location-item">Washington</li>
+				<li class="location-item">Golden State</li>
+				<li class="location-item">New York</li>
+				<li class="location-item">San Francisco</li>
+			</ul>
+		</aside>
+		<main>
+			<header>
+				<nav>
+				<i class="fa fa-bars" aria-hidden="true" id="nav-btn"></i>
+				<h1 class="logo">Neighborhood Map</h1>
+				</nav>
+			</header>
+			<section class="map"></section>
+		</main>
+	</div>
+	<script src="js/base.js"></script>
+</body>
+</html>
