@@ -28,13 +28,14 @@ aside {
 	flex: 0 150px;
 	width: 150px;
 	height: 100%;
+	margin-left: -150px;
 	color: #9E9E9E;
 	background-color: #000;
 	transition: margin-left 0.3s;
 }
 
 .switch {
-	margin-left: -150px;
+	margin-left: 0;
 }
 
 .drawer-name {
@@ -61,11 +62,13 @@ aside {
 	color: #fff;
 	background-color: #4D7DB5;
 	outline: none;
+	cursor: pointer;
 }
 
 .location-item {
 	padding: 10px;
 	text-align: center;
+	cursor: pointer;
 }
 
 .location-item:hover {
@@ -88,6 +91,10 @@ nav {
 	background-color: #212121;
 }
 
+#nav-btn {
+	cursor: pointer;
+}
+
 .logo {
 	display: inline-block;
 	margin-left: 10px;
@@ -95,18 +102,19 @@ nav {
 	font-weight: normal;
 }
 
+.map {
+	height: calc(100% - 50px);
+}
+
 @media screen and (min-width: 425px) {
 	aside {
 		flex: 0 200px;
 		width: 200px;
+		margin-left: -200px;
 	}
 
 	.search-val {
 		text-indent: 1em;
-	}
-
-	.switch {
-		margin-left: -200px;
 	}
 
 	.logo {
@@ -117,10 +125,8 @@ nav {
 @media screen and (min-width: 1024px) {
 	aside {
 		flex: 0 250px;
-		width: 200px;
-	}
-
-	.switch {
+		width: 250px;
 		margin-left: -250px;
 	}
+
 }

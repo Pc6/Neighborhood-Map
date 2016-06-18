@@ -20,6 +20,7 @@
 	  })(); 	  
 	</script>
 	<script src="https://use.fontawesome.com/c110a80857.js"></script>
+	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC1xIK5Ir1Zm3TfMvpBYoQ1dq8VjOSQ7E4&callback=initMap&libraries=places"></script>
 </head>
 <body>
 	<div class="container">
@@ -32,11 +33,8 @@
 					<i class="fa fa-filter" aria-hidden="true"></i> filter
 				</button>
 			</div>
-			<ul class="location-list">
-				<li class="location-item">Washington</li>
-				<li class="location-item">Golden State</li>
-				<li class="location-item">New York</li>
-				<li class="location-item">San Francisco</li>
+			<ul class="location-list" id="location-list" data-bind="foreach: markers">
+				<li class="location-item" data-bind="text: getTitle(), click: $parent.moveMarkerCenter"></li>
 			</ul>
 		</aside>
 		<main>
@@ -46,9 +44,11 @@
 				<h1 class="logo">Neighborhood Map</h1>
 				</nav>
 			</header>
-			<section class="map"></section>
+			<section class="map" id="map"></section>
 		</main>
 	</div>
+	<script src="js/knockout.js"></script>
+	<script src="js/mapBuilder.js"></script>
 	<script src="js/base.js"></script>
 </body>
 </html>
