@@ -29,7 +29,7 @@
 			<div class="search">
 				<input type="text" placeholder="station location" 
 				id="search-val" class="search-val"></input>
-				<button id="search-btn" class="search-btn">
+				<button id="search-btn" class="search-btn" data-bind="click: filterMarker">
 					<i class="fa fa-filter" aria-hidden="true"></i> filter
 				</button>
 			</div>
@@ -48,6 +48,7 @@
 		</main>
 	</div>
 	<script src="js/knockout.js"></script>
+	<script src="js/jquery-3.0.0.min.js"></script>
 	<script src="js/mapBuilder.js"></script>
 	<script src="js/base.js"></script>
 </body>
