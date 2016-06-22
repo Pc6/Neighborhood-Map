@@ -49,29 +49,39 @@ function render() {
 	function ViewModel() {
 		var self = this; 
 		self.markers = ko.observableArray(markers);
-		self.selectedItem = null;
+		self.filterText = ko.observable('');
 		self.moveMarkerCenter = function(marker) {
 			loadData(marker);
 			map.panTo(marker.getPosition());
 			// infowindow.setContent(marker.getTitle());
 			// infowindow.open(map, marker);
 		};
-		self.filterMarker = function() {
-			var searchVal = document.getElementById('search-val').value;
+		self.filterMarker = ko.computed(function() {
+			var searchVal = self.filterText().toLowerCase();
+			if (!searchVal) {
+				return self.markers();
+			} else {
+				return self.markers().filter(function(item) {
+					return stringStartsWith(item.getTitle().toLowerCase(), searchVal);
+				});
+			}
+		}, this);
+		self.filterClicked = function() {
 			self.markers().forEach(function(ele) {
 				ele.setMap(null);
 			});
-			self.markers.remove(function(item) {
-				return item.getTitle().indexOf(searchVal) === -1;
-			});
-			self.markers().forEach(function(ele) {
+			self.filterMarker().forEach(function(ele) {
 				ele.setMap(map);
 			});
-			self.moveMarkerCenter(self.markers()[0]);
+			self.moveMarkerCenter(self.filterMarker()[0]);
 		};
 	}
 
 	ko.applyBindings(new ViewModel());
+}
+
+function stringStartsWith(string, prefix) {
+	return string.slice(0, prefix.length) === prefix;
 }
 
 function loadData(marker) {
@@ -81,7 +91,7 @@ function loadData(marker) {
 			marker.setAnimation(null);
 			infowindow.setContent('Content fails to load');
 			infowindow.open(map, marker);
-		}, 8000);
+		}, 4000);
 	marker.setAnimation(google.maps.Animation.BOUNCE);
 	$.ajax(url, {
 		dataType: 'jsonp'
@@ -89,12 +99,17 @@ function loadData(marker) {
 		// console.log(data);
 		clearTimeout(t);
 		var str = '<h4>' + data[0] + '</h4>';
-		// sometimes data[2][0] is '', so use data[2][1] is better
-		if (data[2][1] && data[2][1].trim() !== '') {
-			str += '<p>' + data[2][1] + '</p>';
-		}
+		str += '<p>' + (data[2][0] || data[2][1] || 'No wikipedia entry found.')
+			+ '</p>';
 		marker.setAnimation(null);
 		infowindow.setContent(str);
 		infowindow.open(map, marker);
 	});
+}
+
+// deal with the error when map fails to load
+function googleError() {
+	var mapNode = document.getElementById('map');
+	mapNode.innerHTML = '<h2>Sorry to tell you that ' 
+		+ 'Google Map fails to load:(</h2>';
 }

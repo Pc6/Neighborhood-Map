@@ -19,8 +19,7 @@
 	    s.parentNode.insertBefore(wf, s);
 	  })(); 	  
 	</script>
-	<script src="https://use.fontawesome.com/c110a80857.js"></script>
-	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC1xIK5Ir1Zm3TfMvpBYoQ1dq8VjOSQ7E4&callback=initMap&libraries=places"></script>
+	<script async src="https://use.fontawesome.com/c110a80857.js"></script>
 </head>
 <body>
 	<div class="container">
@@ -28,12 +27,12 @@
 			<h2 class="drawer-name">Bart Locations</h2>
 			<div class="search">
 				<input type="text" placeholder="station location" 
-				id="search-val" class="search-val"></input>
-				<button id="search-btn" class="search-btn" data-bind="click: filterMarker">
+				data-bind="textInput: filterText" class="search-val" />
+				<button id="search-btn" class="search-btn" data-bind="click: filterClicked">
 					<i class="fa fa-filter" aria-hidden="true"></i> filter
 				</button>
 			</div>
-			<ul class="location-list" id="location-list" data-bind="foreach: markers">
+			<ul class="location-list" id="location-list" data-bind="foreach: filterMarker">
 				<li class="location-item" data-bind="text: getTitle(), click: $parent.moveMarkerCenter"></li>
 			</ul>
 		</aside>
@@ -51,5 +50,6 @@
 	<script src="js/jquery-3.0.0.min.js"></script>
 	<script src="js/mapBuilder.js"></script>
 	<script src="js/base.js"></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC1xIK5Ir1Zm3TfMvpBYoQ1dq8VjOSQ7E4&callback=initMap&libraries=places" onerror="googleError()"></script>
 </body>
 </html>
