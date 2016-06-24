@@ -1,5 +1,6 @@
 var map,
 	infowindow,
+	viewModel,
 	markers = [];
 
 function initMap() {
@@ -19,7 +20,7 @@ function initMap() {
   	service.nearbySearch(request, callback); 
 
   	// After loading the map, the render() function will run
-  	google.maps.event.addDomListener(window, 'load', render);
+  	// google.maps.event.addDomListener(window, 'load', render);
 }
 
 function callback(results, status) {
@@ -28,7 +29,9 @@ function callback(results, status) {
 			//markers.push(results[i]);
 			createMarker(results[i]);
 		}
-		// render();
+		viewModel.markers(markers);
+	} else {
+		alert('Sorry to you that you live alone:(');
 	}
 }
 
@@ -48,8 +51,12 @@ function createMarker(place) {
 function render() {
 	function ViewModel() {
 		var self = this; 
-		self.markers = ko.observableArray(markers);
+		self.drawerState = ko.observable(false);
+		self.markers = ko.observableArray();
 		self.filterText = ko.observable('');
+		self.toggleDrawer = function() {
+			self.drawerState(!self.drawerState());
+		};
 		self.moveMarkerCenter = function(marker) {
 			loadData(marker);
 			map.panTo(marker.getPosition());
@@ -76,35 +83,72 @@ function render() {
 			self.moveMarkerCenter(self.filterMarker()[0]);
 		};
 	}
-
-	ko.applyBindings(new ViewModel());
+	viewModel = new ViewModel();
+	ko.applyBindings(viewModel);
 }
 
 function stringStartsWith(string, prefix) {
-	return string.slice(0, prefix.length) === prefix;
+	return string.indexOf(prefix) >= 0;
 }
 
 function loadData(marker) {
-	var url = 'https://en.wikipedia.org/w/api.php?action=opensearch&format=json&'
-		+ 'search=' + marker.getTitle(),
+	
+	function nonce_generate() {
+	  	return (Math.floor(Math.random() * 1e12).toString());
+	}
+
+	var yelp_url = 'https://api.yelp.com/v2/search',
+
 		t = setTimeout(function() {
 			marker.setAnimation(null);
 			infowindow.setContent('Content fails to load');
 			infowindow.open(map, marker);
-		}, 4000);
-	marker.setAnimation(google.maps.Animation.BOUNCE);
-	$.ajax(url, {
-		dataType: 'jsonp'
-	}).done(function(data) {
-		// console.log(data);
-		clearTimeout(t);
-		var str = '<h4>' + data[0] + '</h4>';
-		str += '<p>' + (data[2][0] || data[2][1] || 'No wikipedia entry found.')
-			+ '</p>';
-		marker.setAnimation(null);
-		infowindow.setContent(str);
-		infowindow.open(map, marker);
-	});
+		}, 4000),
+
+	    parameters = {
+	      	oauth_consumer_key: 'NoKY8ZU-ErLq0F6doFKDGQ',
+	      	oauth_token: 'O5GKx4O67xP-4osKQj33sl2cIGHjLh6E',
+	      	oauth_nonce: nonce_generate(),
+	      	oauth_timestamp: Math.floor(Date.now()/1000),
+	      	oauth_signature_method: 'HMAC-SHA1',
+	      	oauth_version : '1.0',
+	      	callback: 'cb',
+	      	location: 'San Francisco',
+	      	term: marker.getTitle(),
+	      	limit: 1   
+	    };
+
+	encodedSignature = oauthSignature.generate('GET',yelp_url, parameters, 
+		'v0Bz4eq9up_BIU6macAL7K_plKQ', 'UwK27MA-UsQiQVXjzhqV596MD-4');
+	parameters.oauth_signature = encodedSignature;
+
+	var settings = {
+	    url: yelp_url,
+	    data: parameters,
+	    cache: true,       
+	    dataType: 'jsonp',
+	    success: function(data) {
+	        console.log(data);
+	        clearTimeout(t);
+	        var str = '';
+	        if (data.businesses.length) {
+	        	var business = data.businesses[0];
+	        	str += '<h4>' + business.name + '</h4><p>'
+	        		+ business.snippet_text + '</p>';
+	        } else {
+	        	str += '<h4>' + marker.getTitle() + '</h4><p>'
+	        		+ 'No Yelp entry found:(</p>'; 
+	        }	        
+	        marker.setAnimation(null);
+	        infowindow.setContent(str);
+	        infowindow.open(map, marker);
+	      }
+	    };
+
+	marker.setAnimation(google.maps.Animation.BOUNCE); // set the animation
+
+	// Send AJAX query via jQuery library.
+	$.ajax(settings);
 }
 
 // deal with the error when map fails to load
@@ -113,3 +157,6 @@ function googleError() {
 	mapNode.innerHTML = '<h2>Sorry to tell you that ' 
 		+ 'Google Map fails to load:(</h2>';
 }
+
+// render the app
+render();

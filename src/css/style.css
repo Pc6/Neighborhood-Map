@@ -10,8 +10,7 @@ html {
 
 body {
 	height: 100%;
-	font-family: 'Roboto', sans-serif;
-	font-size: 14px;
+	font: 14px 'Roboto', sans-serif;
 }
 
 ul {
@@ -19,12 +18,18 @@ ul {
 }
 
 .container {
-	display: flex;
+	display: -webkit-box;  /* OLD - iOS 6-, Safari 3.1-6, BB7 */
+	display: -ms-flexbox;  /* TWEENER - IE 10 */
+	display: -webkit-flex; /* NEW - Safari 6.1+. iOS 7.1+, BB10 */
+	display: flex;         /* NEW, Spec - Firefox, Chrome, Opera */
 	width: 100%;
 	height: 100%;
 }
 
 aside {
+	-webkit-box-flex: 0 150px;
+	-webkit-flex: 0 150px;
+	-ms-flex: 0 150px;
 	flex: 0 150px;
 	width: 150px;
 	height: 100%;
@@ -50,6 +55,9 @@ aside {
 }
 
 .search-val {
+	-webkit-box-flex: 1 105px;
+	-webkit-flex: 1 105px;
+	-ms-flex: 1 105px;
 	flex: 1 105px;
 	width: 105px;
 	height: 30px;

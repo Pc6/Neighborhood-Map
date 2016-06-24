@@ -23,7 +23,7 @@
 </head>
 <body>
 	<div class="container">
-		<aside id="drawer">
+		<aside id="drawer" data-bind="css: {switch: drawerState}">
 			<h2 class="drawer-name">Bart Locations</h2>
 			<div class="search">
 				<input type="text" placeholder="station location" 
@@ -39,17 +39,18 @@
 		<main>
 			<header>
 				<nav>
-				<i class="fa fa-bars" aria-hidden="true" id="nav-btn"></i>
+				<i class="fa fa-bars" aria-hidden="true" id="nav-btn" data-bind="click: toggleDrawer"></i>
 				<h1 class="logo">Neighborhood Map</h1>
 				</nav>
 			</header>
 			<section class="map" id="map"></section>
 		</main>
 	</div>
+	<script src="js/oauth-signature.min.js"></script>
 	<script src="js/knockout.js"></script>
 	<script src="js/jquery-3.0.0.min.js"></script>
 	<script src="js/mapBuilder.js"></script>
-	<script src="js/base.js"></script>
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC1xIK5Ir1Zm3TfMvpBYoQ1dq8VjOSQ7E4&callback=initMap&libraries=places" onerror="googleError()"></script>
+	<!-- <script src="js/base.js"></script> -->
+	<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC1xIK5Ir1Zm3TfMvpBYoQ1dq8VjOSQ7E4&callback=initMap&libraries=places" onerror="googleError()"></script>
 </body>
 </html>
